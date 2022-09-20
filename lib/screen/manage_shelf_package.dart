@@ -65,30 +65,58 @@ class _ManageShelfPackageWebViewState extends State<ManageShelfPackageWebView> {
                     onMessageReceived: (message) async {
                       print('---------MESSAGE RECEIVED FROM JS--------');
                       print(message.message);
-                      if(message.message == 'JS command: Get shelf information successed!') {
+                      int successIdx = message.message.indexOf(';');
+                      print(successIdx);
+                      if ( successIdx > 0 ) {
+                        String strStatus = message.message.substring(0, successIdx);
+                        int msgIdx = message.message.lastIndexOf(";");
+                        String msg = message.message.substring(successIdx + 5 ,msgIdx);
+                        print(strStatus);
+                        print(msg);
+
+                        bool status = false;
+                        if ( strStatus == "success:true" ) {
+                          status = true;
+                        }
+                        print(status);
+
                         setState(() {
-                          isLoading = false;
-                          _showSuccessMsg('Lấy dữ liệu kệ thành công!', true);
-                        });
-                      }
-                      if(message.message == 'JS command: Import package successed!') {
-                        setState(() {
-                          isLoading = false;
-                          _showSuccessMsg('Chuyển kiện vào kệ thành công!', true);
-                        });
-                      }
-                      if(message.message == 'Kiện đã được lưu trong kệ này') {
-                        setState(() {
-                          isLoading = false;
-                          _showSuccessMsg('Kiện đã trong kệ. Vui lòng quét kiện khác!', false);
-                        });
-                      }
-                      if(message.message == 'QR Code không tồn tại, vui lòng quét mã khác') {
-                        setState(() {
-                          isLoading = false;
-                          _showSuccessMsg('QRCode không tồn tại, vui lòng quét mã khác!', false);
-                        });
-                      }
+                            isLoading = false;
+                            _showSuccessMsg(msg, status);
+                          });
+                        } else {
+                          setState(() {
+                            isLoading = false;
+                            _showSuccessMsg(message.message, false);
+                          });
+                        }
+                      
+
+
+                      // if(message.message == 'JS command: Get shelf information successed!') {
+                      //   setState(() {
+                      //     isLoading = false;
+                      //     _showSuccessMsg('Lấy dữ liệu kệ thành công!', true);
+                      //   });
+                      // }
+                      // if(message.message == 'JS command: Import package successed!') {
+                      //   setState(() {
+                      //     isLoading = false;
+                      //     _showSuccessMsg('Chuyển kiện vào kệ thành công!', true);
+                      //   });
+                      // }
+                      // if(message.message == 'Kiện đã được lưu trong kệ này') {
+                      //   setState(() {
+                      //     isLoading = false;
+                      //     _showSuccessMsg('Kiện đã trong kệ. Vui lòng quét kiện khác!', false);
+                      //   });
+                      // }
+                      // if(message.message == 'QR Code không tồn tại, vui lòng quét mã khác') {
+                      //   setState(() {
+                      //     isLoading = false;
+                      //     _showSuccessMsg('QRCode không tồn tại, vui lòng quét mã khác!', false);
+                      //   });
+                      // }
                     }
                 ),
               },
